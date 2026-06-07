@@ -11,6 +11,8 @@ public interface InventoryRepository
 
     List<InventoryEntity> findByBookId(Long bookId);
 
+    List<InventoryEntity> findAllByBookId(Long bookId);
+
     Optional<InventoryEntity> findByStoreIdAndBookId(
             Long storeId,
             Long bookId
