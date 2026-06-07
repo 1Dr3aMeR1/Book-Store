@@ -1,22 +1,22 @@
-package io.github.dr3amer1.backend.presentation.dto;
+package io.github.dr3amer1.backend.presentation.dto.book;
 
-import jakarta.validation.constraints.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class BookRequest {
+@Builder
+public class BookResponse {
 
-    @NotBlank
+    private Long id;
+
     private String title;
 
-    @NotBlank
     private String author;
 
     private String description;
 
-    @DecimalMin("0.0")
     private BigDecimal price;
 
     private String previewUrl;
