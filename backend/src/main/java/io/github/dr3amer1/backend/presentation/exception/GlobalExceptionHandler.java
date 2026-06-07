@@ -1,6 +1,6 @@
-package io.github.dr3amer1.backend.application.exception;
+package io.github.dr3amer1.backend.presentation.exception;
 
-import io.github.dr3amer1.backend.presentation.exception.EntityNotFoundException;
+import io.github.dr3amer1.backend.application.exception.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
