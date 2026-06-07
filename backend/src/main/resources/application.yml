@@ -1,4 +1,4 @@
-spring:
+ъspring:
   datasource:
     url: jdbc:postgresql://localhost:5434/book_store
     username: postgres
@@ -10,3 +10,7 @@ spring:
 
   flyway:
     enabled: true
+
+jwt:
+  secret: my-super-secret-key-for-book-store-project
+  expiration: 86400000
