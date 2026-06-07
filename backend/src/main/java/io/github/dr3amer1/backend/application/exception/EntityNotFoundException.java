@@ -1,4 +1,4 @@
-package io.github.dr3amer1.backend.presentation.exception;
+package io.github.dr3amer1.backend.application.exception;
 
 public class EntityNotFoundException
         extends RuntimeException {

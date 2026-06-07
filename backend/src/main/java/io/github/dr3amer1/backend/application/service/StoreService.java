@@ -1,8 +1,8 @@
 package io.github.dr3amer1.backend.application.service;
 
+import io.github.dr3amer1.backend.application.exception.EntityNotFoundException;
 import io.github.dr3amer1.backend.domain.model.StoreEntity;
 import io.github.dr3amer1.backend.domain.repository.StoreRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,33 +18,47 @@ public class StoreService {
 
     @Transactional(readOnly = true)
     public List<StoreEntity> getAllStores() {
+
         return storeRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     public StoreEntity getStoreById(Long id) {
+
         return storeRepository.findById(id)
                 .orElseThrow(() ->
                         new EntityNotFoundException(
-                                "Store not found: " + id));
+                                "Store not found: " + id
+                        ));
     }
 
-    public StoreEntity createStore(StoreEntity store) {
+    public StoreEntity createStore(
+            StoreEntity store) {
+
         return storeRepository.save(store);
     }
 
-    public StoreEntity updateStore(Long id,
-                                   StoreEntity updatedStore) {
+    public StoreEntity updateStore(
+            Long id,
+            StoreEntity updatedStore) {
 
-        StoreEntity store = getStoreById(id);
+        StoreEntity store =
+                getStoreById(id);
 
-        store.setName(updatedStore.getName());
-        store.setAddress(updatedStore.getAddress());
+        store.setName(
+                updatedStore.getName());
+
+        store.setAddress(
+                updatedStore.getAddress());
 
         return storeRepository.save(store);
     }
 
     public void deleteStore(Long id) {
-        storeRepository.deleteById(id);
+
+        StoreEntity store =
+                getStoreById(id);
+
+        storeRepository.delete(store);
     }
 }
