@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "books")
@@ -31,4 +33,16 @@ public class BookEntity {
 
     @Column(name = "publication_year")
     private Integer publicationYear;
+
+    @ManyToMany
+    @JoinTable(
+            name = "book_categories",
+            joinColumns =
+            @JoinColumn(name = "book_id"),
+
+            inverseJoinColumns =
+            @JoinColumn(name = "category_id")
+    )
+    private Set<CategoryEntity> categories =
+            new HashSet<>();
 }
