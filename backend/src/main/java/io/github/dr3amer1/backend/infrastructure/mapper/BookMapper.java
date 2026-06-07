@@ -1,8 +1,8 @@
 package io.github.dr3amer1.backend.infrastructure.mapper;
 
 import io.github.dr3amer1.backend.domain.model.BookEntity;
-import io.github.dr3amer1.backend.presentation.dto.BookRequest;
-import io.github.dr3amer1.backend.presentation.dto.BookResponse;
+import io.github.dr3amer1.backend.presentation.dto.book.BookRequest;
+import io.github.dr3amer1.backend.presentation.dto.book.BookResponse;
 import org.springframework.stereotype.Component;
 
 @Component
