@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 
+import AdminRoute from "./components/AdminRoute";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/user/Home";
@@ -66,26 +67,50 @@ function App() {
 
                     <Route
                         path="/admin"
-                        element={<AdminPanel />}
+                        element={
+                            <AdminRoute>
+                                <AdminPanel />
+                            </AdminRoute>
+                        }
                     />
+
                     <Route
                         path="/admin/books"
-                        element={<AdminBooks />}
+                        element={
+                            <AdminRoute>
+                                <AdminBooks />
+                            </AdminRoute>
+                        }
                     />
+
 
                     <Route
                         path="/admin/categories"
-                        element={<AdminCategories />}
+                        element={
+                            <AdminRoute>
+                                <AdminCategories />
+                            </AdminRoute>
+                        }
                     />
+
 
                     <Route
                         path="/admin/stores"
-                        element={<AdminStores />}
+                        element={
+                            <AdminRoute>
+                                <AdminStores />
+                            </AdminRoute>
+                        }
                     />
+
 
                     <Route
                         path="/admin/orders"
-                        element={<AdminOrders />}
+                        element={
+                            <AdminRoute>
+                                <AdminOrders />
+                            </AdminRoute>
+                        }
                     />
                 </Routes>
             </main>
