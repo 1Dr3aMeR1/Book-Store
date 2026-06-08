@@ -1,14 +1,13 @@
 package io.github.dr3amer1.backend.application.service;
 
-import io.github.dr3amer1.backend.application.exception.EntityNotFoundException;
 import io.github.dr3amer1.backend.domain.model.*;
 import io.github.dr3amer1.backend.domain.repository.*;
 import io.github.dr3amer1.backend.presentation.dto.order.CreateOrderItemRequest;
 import io.github.dr3amer1.backend.presentation.dto.order.CreateOrderRequest;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,16 +15,19 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class OrderService {
 
     private final OrderRepository orderRepository;
+
     private final OrderItemRepository orderItemRepository;
 
-    private final UserRepository userRepository;
     private final BookRepository bookRepository;
+
+    private final UserRepository userRepository;
+
     private final InventoryRepository inventoryRepository;
 
+    @Transactional
     public OrderEntity createOrder(
             String email,
             CreateOrderRequest request
@@ -34,11 +36,12 @@ public class OrderService {
         UserEntity user =
                 userRepository.findByEmail(email)
                         .orElseThrow(() ->
-                                new UsernameNotFoundException(
-                                        email
+                                new EntityNotFoundException(
+                                        "User not found"
                                 ));
 
-        OrderEntity order = new OrderEntity();
+        OrderEntity order =
+                new OrderEntity();
 
         order.setUser(user);
         order.setStatus(OrderStatus.CREATED);
@@ -47,94 +50,101 @@ public class OrderService {
 
         order = orderRepository.save(order);
 
-        BigDecimal totalPrice = BigDecimal.ZERO;
+        BigDecimal totalPrice =
+                BigDecimal.ZERO;
 
-        for (CreateOrderItemRequest itemRequest :
-                request.getItems()) {
+        for (CreateOrderItemRequest itemRequest
+                : request.getItems()) {
 
             BookEntity book =
                     bookRepository.findById(
-                                    itemRequest.getBookId())
+                                    itemRequest.getBookId()
+                            )
                             .orElseThrow(() ->
                                     new EntityNotFoundException(
-                                            "Book not found: "
-                                                    + itemRequest.getBookId()));
-
-            int requiredQuantity =
-                    itemRequest.getQuantity();
+                                            "Book not found"
+                                    ));
 
             List<InventoryEntity> inventoryList =
                     inventoryRepository.findByBookId(
                             book.getId()
                     );
 
-            int availableQuantity =
+            int available =
                     inventoryList.stream()
                             .mapToInt(
                                     InventoryEntity::getQuantity
                             )
                             .sum();
 
-            if (availableQuantity < requiredQuantity) {
+            if (available <
+                    itemRequest.getQuantity()) {
 
-                throw new IllegalArgumentException(
-                        "Not enough books in stock: "
-                                + book.getTitle()
+                throw new IllegalStateException(
+                        "Not enough books in stock"
                 );
             }
 
             int remaining =
-                    requiredQuantity;
+                    itemRequest.getQuantity();
 
-            for (InventoryEntity inventory :
-                    inventoryList) {
+            for (InventoryEntity inventory
+                    : inventoryList) {
 
-                if (remaining <= 0) {
+                if (remaining == 0) {
                     break;
                 }
 
                 int current =
                         inventory.getQuantity();
 
-                int toTake =
-                        Math.min(
-                                current,
-                                remaining
-                        );
+                if (current >= remaining) {
 
-                inventory.setQuantity(
-                        current - toTake
-                );
+                    inventory.setQuantity(
+                            current - remaining
+                    );
 
-                inventoryRepository.save(
-                        inventory
-                );
+                    inventoryRepository.save(
+                            inventory
+                    );
 
-                remaining -= toTake;
+                    remaining = 0;
+                } else {
+
+                    inventory.setQuantity(0);
+
+                    inventoryRepository.save(
+                            inventory
+                    );
+
+                    remaining -= current;
+                }
             }
 
-            OrderItemEntity item =
+            OrderItemEntity orderItem =
                     new OrderItemEntity();
 
-            item.setOrder(order);
-            item.setBook(book);
+            orderItem.setOrder(order);
+            orderItem.setBook(book);
 
-            item.setQuantity(
-                    requiredQuantity
+            orderItem.setQuantity(
+                    itemRequest.getQuantity()
             );
 
-            item.setPrice(
+            orderItem.setPrice(
                     book.getPrice()
             );
 
-            orderItemRepository.save(item);
+            orderItemRepository.save(
+                    orderItem
+            );
 
             totalPrice =
                     totalPrice.add(
                             book.getPrice()
                                     .multiply(
                                             BigDecimal.valueOf(
-                                                    requiredQuantity
+                                                    itemRequest.getQuantity()
                                             )
                                     )
                     );
@@ -149,23 +159,39 @@ public class OrderService {
         );
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<OrderEntity> getMyOrders(
             String email
     ) {
 
         UserEntity user =
-                userRepository.findByEmail(
-                                email
-                        )
+                userRepository.findByEmail(email)
                         .orElseThrow(() ->
-                                new UsernameNotFoundException(
-                                        email
+                                new EntityNotFoundException(
+                                        "User not found"
                                 ));
 
         return orderRepository
                 .findByUserIdOrderByCreatedAtDesc(
                         user.getId()
                 );
+    }
+
+    @Transactional
+    public OrderEntity getOrderById(
+            Long id
+    ) {
+
+        return orderRepository.findById(id)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Order not found"
+                        ));
+    }
+
+    @Transactional
+    public List<OrderEntity> getAllOrders() {
+
+        return orderRepository.findAll();
     }
 }

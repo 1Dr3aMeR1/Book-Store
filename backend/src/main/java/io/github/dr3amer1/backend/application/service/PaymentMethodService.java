@@ -31,4 +31,37 @@ public class PaymentMethodService {
                                 "Payment method not found: " + id
                         ));
     }
+
+    public PaymentMethodEntity create(
+            PaymentMethodEntity method
+    ) {
+
+        return paymentMethodRepository.save(
+                method
+        );
+    }
+
+    public PaymentMethodEntity update(
+            Long id,
+            PaymentMethodEntity updated
+    ) {
+
+        PaymentMethodEntity method =
+                getById(id);
+
+        method.setName(
+                updated.getName()
+        );
+
+        return paymentMethodRepository.save(
+                method
+        );
+    }
+
+    public void delete(Long id) {
+
+        paymentMethodRepository.delete(
+                getById(id)
+        );
+    }
 }
