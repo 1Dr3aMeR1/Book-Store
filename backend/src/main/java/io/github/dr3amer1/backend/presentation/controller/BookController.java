@@ -18,6 +18,7 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+
     private final BookMapper bookMapper;
 
     @GetMapping
@@ -33,37 +34,98 @@ public class BookController {
     @GetMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public BookResponse getBookById(
-            @PathVariable Long id) {
+            @PathVariable Long id
+    ) {
 
         return bookMapper.toResponse(
                 bookService.getBookById(id)
         );
     }
 
+    @GetMapping("/category/{categoryId}")
+    @PreAuthorize("isAuthenticated()")
+    public List<BookResponse> getBooksByCategory(
+            @PathVariable Long categoryId
+    ) {
+
+        return bookService
+                .getBooksByCategory(categoryId)
+                .stream()
+                .map(bookMapper::toResponse)
+                .toList();
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public BookResponse createBook(
             @Valid
-            @RequestBody BookRequest request) {
+            @RequestBody BookRequest request
+    ) {
 
         BookEntity created =
                 bookService.createBook(
-                        bookMapper.toEntity(request));
+                        bookMapper.toEntity(request)
+                );
 
-        return bookMapper.toResponse(created);
+        return bookMapper.toResponse(
+                created
+        );
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BookResponse updateBook(
+            @PathVariable Long id,
+            @RequestBody BookRequest request
+    ) {
+
+        BookEntity updated =
+                bookService.updateBook(
+                        id,
+                        bookMapper.toEntity(request)
+                );
+
+        return bookMapper.toResponse(
+                updated
+        );
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteBook(
-            @PathVariable Long id) {
+            @PathVariable Long id
+    ) {
 
         bookService.deleteBook(id);
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping("/{bookId}/categories/{categoryId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void upadteBook(@PathVariable Long id, @RequestBody BookRequest request) {
-        bookService.updateBook(id, bookMapper.toEntity(request));
+    public BookResponse addCategory(
+            @PathVariable Long bookId,
+            @PathVariable Long categoryId
+    ) {
+
+        return bookMapper.toResponse(
+                bookService.addCategory(
+                        bookId,
+                        categoryId
+                )
+        );
+    }
+
+    @DeleteMapping("/{bookId}/categories/{categoryId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public BookResponse removeCategory(
+            @PathVariable Long bookId,
+            @PathVariable Long categoryId
+    ) {
+
+        return bookMapper.toResponse(
+                bookService.removeCategory(
+                        bookId,
+                        categoryId
+                )
+        );
     }
 }

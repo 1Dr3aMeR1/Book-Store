@@ -1,6 +1,9 @@
 package io.github.dr3amer1.backend.presentation.controller;
 
 import io.github.dr3amer1.backend.application.service.PaymentMethodService;
+import io.github.dr3amer1.backend.domain.model.PaymentMethodEntity;
+import io.github.dr3amer1.backend.infrastructure.mapper.PaymentMethodMapper;
+import io.github.dr3amer1.backend.presentation.dto.payment.PaymentMethodRequest;
 import io.github.dr3amer1.backend.presentation.dto.payment.PaymentMethodResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,17 +18,61 @@ public class PaymentMethodController {
 
     private final PaymentMethodService paymentMethodService;
 
+    private final PaymentMethodMapper paymentMethodMapper;
+
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
     public List<PaymentMethodResponse> getAllMethods() {
 
         return paymentMethodService.getAllMethods()
                 .stream()
-                .map(method ->
-                        PaymentMethodResponse.builder()
-                                .id(method.getId())
-                                .name(method.getName())
-                                .build())
+                .map(paymentMethodMapper::toResponse)
                 .toList();
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public PaymentMethodResponse create(
+            @RequestBody PaymentMethodRequest request
+    ) {
+
+        PaymentMethodEntity method =
+                new PaymentMethodEntity();
+
+        method.setName(request.getName());
+
+        return paymentMethodMapper.toResponse(
+                paymentMethodService.create(
+                        method
+                )
+        );
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public PaymentMethodResponse update(
+            @PathVariable Long id,
+            @RequestBody PaymentMethodRequest request
+    ) {
+
+        PaymentMethodEntity method =
+                new PaymentMethodEntity();
+
+        method.setName(request.getName());
+
+        return paymentMethodMapper.toResponse(
+                paymentMethodService.update(
+                        id,
+                        method
+                )
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(
+            @PathVariable Long id
+    ) {
+
+        paymentMethodService.delete(id);
     }
 }

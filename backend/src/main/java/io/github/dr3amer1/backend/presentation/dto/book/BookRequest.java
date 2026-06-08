@@ -14,6 +14,8 @@ public class BookRequest {
     @NotBlank
     private String author;
 
+    private String isbn;
+
     private String description;
 
     @DecimalMin("0.0")

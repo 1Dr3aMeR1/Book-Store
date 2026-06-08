@@ -2,6 +2,7 @@ package io.github.dr3amer1.backend.presentation.controller;
 
 import io.github.dr3amer1.backend.application.service.StoreService;
 import io.github.dr3amer1.backend.domain.model.StoreEntity;
+import io.github.dr3amer1.backend.infrastructure.mapper.StoreMapper;
 import io.github.dr3amer1.backend.presentation.dto.book.BookRequest;
 import io.github.dr3amer1.backend.presentation.dto.store.StoreRequest;
 import io.github.dr3amer1.backend.presentation.dto.store.StoreResponse;
@@ -59,5 +60,36 @@ public class StoreController {
             @PathVariable Long id) {
 
         storeService.deleteStore(id);
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public StoreResponse getStore(
+            @PathVariable Long id
+    ) {
+
+        return StoreMapper.toResponse(
+                storeService.getStoreById(id)
+        );
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public StoreResponse updateStore(
+            @PathVariable Long id,
+            @RequestBody StoreRequest request
+    ) {
+
+        StoreEntity store = new StoreEntity();
+
+        store.setName(request.getName());
+        store.setAddress(request.getAddress());
+
+        return StoreMapper.toResponse(
+                storeService.updateStore(
+                        id,
+                        store
+                )
+        );
     }
 }

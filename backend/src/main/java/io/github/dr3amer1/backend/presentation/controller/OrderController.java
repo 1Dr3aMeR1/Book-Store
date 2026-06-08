@@ -18,7 +18,6 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    @PreAuthorize("isAuthenticated()")
     public OrderEntity createOrder(
             @RequestBody CreateOrderRequest request,
             Authentication authentication
@@ -39,5 +38,21 @@ public class OrderController {
         return orderService.getMyOrders(
                 authentication.getName()
         );
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public OrderEntity getOrder(
+            @PathVariable Long id
+    ) {
+
+        return orderService.getOrderById(id);
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<OrderEntity> getAllOrders() {
+
+        return orderService.getAllOrders();
     }
 }
