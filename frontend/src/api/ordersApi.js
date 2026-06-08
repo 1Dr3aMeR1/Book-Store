@@ -1,13 +1,13 @@
 import api from "./axios";
 
-export const createOrder = (order) => {
-    return api.post(
-        "/orders", order
-    );
-};
+export const getOrders = () =>
+    api.get("/orders");
 
-export const getMyOrders = () => {
-    return api.get(
-        "/orders/my"
-    );
-};
+export const getOrderById = (id) =>
+    api.get(`/orders/${id}`);
+
+export const getMyOrders = () =>
+    api.get("/orders/my");
+
+export const createOrder = (order) =>
+    api.post("/orders", order);
