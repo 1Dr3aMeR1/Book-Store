@@ -1,6 +1,18 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
+    const { token, logout } = useAuth();
+    let isAdmin = false;
+    if (token) {
+        const user = JSON.parse(
+            atob(
+                token.split(".")[1]
+            )
+        );
+        isAdmin = user.sub === "user";
+    }
+
     return (
         <header className="header">
             <div className="header-left">
@@ -14,7 +26,6 @@ function Header() {
             </div>
 
             <div className="header-right">
-
                 <Link to="/cart">
                     Корзина
                 </Link>
@@ -23,9 +34,23 @@ function Header() {
                     Заказы
                 </Link>
 
-                <Link to="/login">
-                    Вход
-                </Link>
+                {
+                    token && isAdmin &&
+                    <Link to="/admin">
+                        Админ
+                    </Link>
+                }
+
+                {
+                    token ?
+                        <button onClick={logout}>
+                            Выйти
+                        </button>
+                        :
+                        <Link to="/login">
+                            Вход
+                        </Link>
+                }
             </div>
         </header>
     );

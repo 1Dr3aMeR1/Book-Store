@@ -26,6 +26,7 @@ body {
 .header-left,
 .header-right {
     display: flex;
+    align-items: center;
     gap: 30px;
 }
 
@@ -120,4 +121,29 @@ main {
 .footer p {
     margin: 5px 0;
     font-size: 14px;
+}
+
+.admin-page {
+    padding: 50px;
+}
+
+
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 300px;
+}
+
+.admin-menu a {
+    background: #5b21b6;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.admin-menu a:hover {
+    background: #7c3aed;
 }
