@@ -22,6 +22,10 @@ function AdminPanel() {
                 <Link to="/admin/orders">
                     Управление заказами
                 </Link>
+
+                <Link to="/admin/support">
+                    Техподдержка
+                </Link>
             </div>
         </div>
     );

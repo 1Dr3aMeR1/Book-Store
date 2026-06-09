@@ -18,6 +18,8 @@ import AdminCategories from "./pages/admin/AdminCategories";
 import AdminStores from "./pages/admin/AdminStores";
 import AdminOrders from "./pages/admin/AdminOrders";
 
+import AdminSupport from "./pages/admin/AdminSupport";
+import Support from "./pages/user/Support";
 
 function App() {
     return (
@@ -66,15 +68,6 @@ function App() {
                     />
 
                     <Route
-                        path="/admin"
-                        element={
-                            <AdminRoute>
-                                <AdminPanel />
-                            </AdminRoute>
-                        }
-                    />
-
-                    <Route
                         path="/admin/books"
                         element={
                             <AdminRoute>
@@ -82,7 +75,6 @@ function App() {
                             </AdminRoute>
                         }
                     />
-
 
                     <Route
                         path="/admin/categories"
@@ -93,7 +85,6 @@ function App() {
                         }
                     />
 
-
                     <Route
                         path="/admin/stores"
                         element={
@@ -103,12 +94,36 @@ function App() {
                         }
                     />
 
-
                     <Route
                         path="/admin/orders"
                         element={
                             <AdminRoute>
                                 <AdminOrders />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/support"
+                        element={
+                            <Support />
+                        }
+                    />
+
+                    <Route
+                        path="/admin/support"
+                        element={
+                            <AdminRoute>
+                                <AdminSupport />
+                            </AdminRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin"
+                        element={
+                            <AdminRoute>
+                                <AdminPanel />
                             </AdminRoute>
                         }
                     />
