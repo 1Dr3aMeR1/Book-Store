@@ -413,3 +413,69 @@ main {
     margin: 5px 0 0;
     font-size: 16px;
 }
+
+.admin-page {
+    padding: 40px;
+}
+
+.admin-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 35px;
+    max-width: 1000px;
+}
+
+.admin-form input {
+    width: 250px;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.admin-form button {
+    padding: 0 35px;
+    border: none;
+    border-radius: 12px;
+    background: #6b28d9;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.admin-card {
+    background: white;
+    width: 700px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+}
+
+.admin-card-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #29245f;
+    margin-bottom: 10px;
+}
+
+.admin-card-text {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.admin-actions button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    background: #6b28d9;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
