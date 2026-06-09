@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom";
 import { getBookById } from "../../api/booksApi";
 import { getBookInventory } from "../../api/inventoryApi";
 import { getStoreById } from "../../api/storesApi";
+import { useCart } from "../../context/CartContext";
 
 function BookDetails() {
     const [book, setBook] = useState(null);
     const [inventory, setInventory] = useState([]);
     const [stores, setStores] = useState({});
     const { id } = useParams();
+    const { addToCart } = useCart();
 
     useEffect(() => {
         getBookById(id)
@@ -154,6 +156,15 @@ function BookDetails() {
                 <div className="price-block">
                     {book.price} ₽
                 </div>
+
+                <button
+                    className="cart-button"
+                    onClick={() =>
+                        addToCart(book)
+                    }
+                >
+                    Добавить в корзину
+                </button>
             </div>
         </div>
     );

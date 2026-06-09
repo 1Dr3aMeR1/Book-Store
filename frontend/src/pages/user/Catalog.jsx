@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { getBooks } from "../../api/booksApi";
 import { getCategories } from "../../api/categoriesApi";
-
+import { useCart } from "../../context/CartContext";
 
 const Catalog = () => {
     const [books, setBooks] = useState([]);
@@ -12,6 +12,7 @@ const Catalog = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
+    const { addToCart } = useCart();
 
     useEffect(() => {
         getBooks()
@@ -159,6 +160,15 @@ const Catalog = () => {
                             >
                                 Подробнее
                             </Link>
+
+                            <button
+                                className="cart-button"
+                                onClick={() =>
+                                    addToCart(book)
+                                }
+                            >
+                                В корзину
+                            </button>
                         </div>
                     ))
                 }
