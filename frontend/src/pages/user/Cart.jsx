@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "../../context/CartContext";
 import { getBookInventory } from "../../api/inventoryApi";
 import { getStoreById } from "../../api/storesApi";
+import { createOrder } from "../../api/ordersApi";
 
 const Cart = () => {
     const {
@@ -41,7 +42,7 @@ const Cart = () => {
         (sum, book) => sum + book.price * book.count, 0
     );
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         for (const book of cart) {
             if (!selectedStores[book.id]) {
                 alert(
@@ -49,22 +50,40 @@ const Cart = () => {
                 );
                 return;
             }
-            const store = stores[book.id].find(
-                item => Number(item.id) === Number(selectedStores[book.id])
+
+            const store = stores[book.id].find(item =>
+                    Number(item.id) === Number(selectedStores[book.id])
             );
 
             if (book.count > store.quantity) {
                 alert(
-                    `В магазине "${store.name}" доступно только ${store.quantity} шт. книги "${book.title}"`
+                    `В магазине "${store.name}" доступно только ${store.quantity} шт.`
                 );
                 return;
             }
         }
 
-        alert(
-            "Заказ успешно оформлен"
-        );
-        clearCart();
+        const order = {
+            items: cart.map(book => ({
+                bookId: book.id,
+                quantity: book.count
+            }))
+        };
+
+        try {
+            await createOrder(order);
+            alert(
+                "Заказ успешно оформлен"
+            );
+            clearCart();
+        }
+
+        catch (error) {
+            console.log(error);
+            alert(
+                "Ошибка оформления заказа"
+            );
+        }
     };
 
     if (cart.length === 0) {
@@ -73,7 +92,6 @@ const Cart = () => {
                 <h1>
                     Корзина
                 </h1>
-
                 <p>
                     Корзина пуста
                 </p>

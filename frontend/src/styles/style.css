@@ -366,4 +366,22 @@ main {
     cursor: pointer;
 }
 
+.order-card {
+    background: white;
+    width: 600px;
+    padding: 30px;
+    margin-bottom: 25px;
+    border-radius: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    border-left: 6px solid #6b28d9;
+}
+
+.order-card h2 {
+    color: #25245c;
+}
+
+.order-card p {
+    font-size: 20px;
+}
+
 
