@@ -384,4 +384,32 @@ main {
     font-size: 20px;
 }
 
+.support-list {
+    width: 600px;
+    margin-top: 20px;
+}
 
+.support-ticket {
+    background: white;
+    padding: 12px 20px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+    font-size: 18px;
+}
+
+.support-ticket:hover {
+    transform: translateY(-1px);
+}
+
+.support-ticket h3 {
+    margin: 0;
+    color: #29245f;
+
+    font-size: 18px;
+}
+.support-ticket p {
+    margin: 5px 0 0;
+    font-size: 16px;
+}
